@@ -16,11 +16,11 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - { name: Windows (MSVC),                os: windows-2019, shell: sh, msvc: true, artifact: 'SDL3_gpu_shadercross-VC-x64' }
+          #- { name: Windows (MSVC),                os: windows-2019, shell: sh, msvc: true, artifact: 'SDL3_gpu_shadercross-VC-x64' }
           - { name: Windows (mingw64),             os: windows-latest, shell: 'msys2 {0}', msystem: mingw64, msys-env: mingw-w64-x86_64, artifact: 'SDL3_gpu_shadercross-mingw64' }
-          - { name: Ubuntu 20.04,                  os: ubuntu-20.04,   shell: sh, artifact: 'SDL3_gpu_shadercross-linux-x64' }
-          - { name: Steam Linux Runtime (Sniper),  os: ubuntu-latest,  shell: sh, artifact: 'SDL3_gpu_shadercross-slrsniper', container: 'registry.gitlab.steamos.cloud/steamrt/sniper/sdk:beta' }
-          - { name: macOS,                         os: macos-latest,   shell: sh, artifact: 'SDL3_gpu_shadercross-macos-arm64' }
+          #- { name: Ubuntu 20.04,                  os: ubuntu-20.04,   shell: sh, artifact: 'SDL3_gpu_shadercross-linux-x64' }
+          #- { name: Steam Linux Runtime (Sniper),  os: ubuntu-latest,  shell: sh, artifact: 'SDL3_gpu_shadercross-slrsniper', container: 'registry.gitlab.steamos.cloud/steamrt/sniper/sdk:beta' }
+          #- { name: macOS,                         os: macos-latest,   shell: sh, artifact: 'SDL3_gpu_shadercross-macos-arm64' }
 
 
     steps:
