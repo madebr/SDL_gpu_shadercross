@@ -96,6 +96,14 @@ if(SDLGPUSHADERCROSS_VENDORED)
 		list(APPEND install_extra_targets spirv-cross-c-shared)
 		list(APPEND pc_requires "spirv-cross-c-shared")
 	endif()
+
+	add_subdirectory(external/SPIRV-Headers EXCLUDE_FROM_ALL)
+	add_subdirectory(external/SPIRV-Tools EXCLUDE_FROM_ALL)
+
+	set(DXC_COVERAGE OFF)
+	include(external/DirectXShaderCompiler/cmake/caches/PredefinedParams.cmake)
+	add_subdirectory(external/DirectXShaderCompiler EXCLUDE_FROM_ALL)
+	list(APPEND install_extra_targets dxcompiler dxildll)
 else()
 	if(SDLGPUSHADERCROSS_LINK_STATIC)
 		enable_language(CXX)
@@ -183,6 +191,7 @@ foreach(target IN LISTS SDL3_gpu_shadercross_targets)
 	else()
 		target_link_libraries(${target} PRIVATE spirv-cross-c-shared)
 	endif()
+	target_link_libraries(${target} PRIVATE dxcompiler dxildll)
 	if(SDLGPUSHADERCROSS_LINK_STATIC)
 		# spirv-cross uses C++
 		set_property(TARGET ${target} PROPERTY LINKER_LANGUAGE CXX)
@@ -346,41 +355,6 @@ if(SDLGPUSHADERCROSS_INSTALL_DEPS)
 	# Install SDL3
 	if(SDLGPUSHADERCROSS_CLI AND NOT SDLGPUSHADERCROSS_CLI_STATIC)
 		install(IMPORTED_RUNTIME_ARTIFACTS SDL3::SDL3-shared RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
-	endif()
-
-	# Download and install prebuilt dxil and dxcompiler shared libraries
-	include(ExternalProject)
-	if(LINUX AND SDL_CPU_X64)
-		ExternalProject_Add(dxc
-			URL					"${DXC_LINUX_X64_URL}"
-			URL_HASH			"${DXC_LINUX_X64_HASH}"
-			DOWNLOAD_EXTRACT_TIMESTAMP "1"
-			CONFIGURE_COMMAND 	""
-			BUILD_COMMAND	 	""
-			INSTALL_COMMAND	 	""
-		)
-		ExternalProject_Get_property(dxc SOURCE_DIR)
-		install(FILES "${SOURCE_DIR}/lib/libdxcompiler.so" "${SOURCE_DIR}/lib/libdxil.so" DESTINATION "${CMAKE_INSTALL_LIBDIR}" PERMISSIONS ${chmod_0755})
-		install(FILES "${SOURCE_DIR}/LICENSE-LLVM.txt" "${SOURCE_DIR}/LICENSE-MS.txt" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/licenses/dxc")
-	elseif(WINDOWS AND (SDL_CPU_ARM64 OR SDL_CPU_X86 OR SDL_CPU_X64))
-		ExternalProject_Add(dxc
-			URL					"${DXC_WINDOWS_X86_X64_ARM64_URL}"
-			URL_HASH			"${DXC_WINDOWS_X86_X64_ARM64_HASH}"
-			DOWNLOAD_EXTRACT_TIMESTAMP "1"
-			CONFIGURE_COMMAND 	""
-			BUILD_COMMAND	 	""
-			INSTALL_COMMAND	 	""
-		)
-		if(SDL_CPU_ARM64)
-			set(arch_dir "arm64")
-		elseif(SDL_CPU_X86)
-			set(arch_dir "x86")
-		elseif(SDL_CPU_X64)
-			set(arch_dir "x64")
-		endif()
-		ExternalProject_Get_property(dxc SOURCE_DIR)
-		install(FILES "${SOURCE_DIR}/bin/${arch_dir}/dxcompiler.dll" "${SOURCE_DIR}/bin/${arch_dir}/dxil.dll" DESTINATION "${CMAKE_INSTALL_BINDIR}" PERMISSIONS ${chmod_0755})
-		install(FILES "${SOURCE_DIR}/LICENSE-LLVM.txt" "${SOURCE_DIR}/LICENSE-MS.txt" "${SOURCE_DIR}/LICENSE-MIT.txt" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/licenses/dxc")
 	endif()
 
 	if(NOT WIN32)
