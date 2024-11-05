@@ -9,4 +9,4 @@
 	url = https://github.com/KhronosGroup/SPIRV-Tools.git
 [submodule "DirectXShaderCompiler"]
 	path = external/DirectXShaderCompiler
-	url = https://github.com/microsoft/DirectXShaderCompiler.git
+	url = https://github.com/madebr/DirectXShaderCompiler.git
