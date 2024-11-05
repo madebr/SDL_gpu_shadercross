@@ -70,6 +70,10 @@ jobs:
           brew install bison
           echo "/opt/homebrew/opt/bison/bin" >>$GITHUB_PATH
 
+      - name: Download dependencies
+        run: |
+          cmake -P external/download-DirectXShaderCompiler.cmake
+
       - name: Configure (CMake)
         run: |
           cmake -S . -B build -GNinja \

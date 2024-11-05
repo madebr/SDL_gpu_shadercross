@@ -6,6 +6,9 @@ set_package_properties(SDL3_gpu_shadercross PROPERTIES
     DESCRIPTION "Support SPIR-V and HLSL on various backends"
 )
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
+find_package(DirectXShaderCompiler QUIET)
+
 set(SDL3_gpu_shadercross_FOUND ON)
 
 set(SDL3_gpu_SHADERCROSS_REQUIRED_VERSION  @SDL_REQUIRED_VERSION@)
