@@ -94,7 +94,7 @@ jobs:
           echo "spirv_cross_c_shared_ROOT=${spirv_cross_prefix}${joiner}${spirv_cross_prefix}/share/spirv_cross_c_shared" >>${GITHUB_ENV}
       - name: Configure (CMake)
         run: |
-          cmake -S . -B build -GNinja \
+          cmake -S . -B build -GNinja --trace-expand \
             -DCMAKE_BUILD_TYPE=RelWithDebInfo \
             -DSDLGPUSHADERCROSS_SHARED=ON \
             -DSDLGPUSHADERCROSS_STATIC=ON \
